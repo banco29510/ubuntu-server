@@ -1,6 +1,3 @@
-#
-# Pour ubuntu 14.04
-#
 
 - name: Installation de x2go
   hosts: localhost
@@ -16,34 +13,3 @@
       apt: name=x2goserver state=latest
       apt: name=x2goserver-xsession state=latest
       apt: name=xfce4 state=latest
-
-
-- name: Installation de la configurations générales
-  hosts: localhost
-  remote_user: root
-  tasks:
-    - name: Installation de ntp
-      apt: name=ntp state=latest
-    - name: Installation de Gedit
-      apt: name=gedit state=latest
-    #- name: Installation de Firefox
-    #  apt: name=firefox state=latest
-    - name: Installation de unzip
-      apt: name=unzip state=latest
-    #- name: Installation de Thunderbird
-    #  apt: name=thunderbird state=latest
-    #- name: Installation de GAdminProFTPd
-    #  apt: name=gadmin-proftpd state=latest
-    #- name: Installation de clamav
-    #  apt: name=clamav state=latest
-    - name: Installation de gdebi
-      apt: name=gdebi state=latest
-    - name: Installation de erlang
-      apt: name=erlang state=latest
-    - name: Installation de doxygen
-      apt: name=doxygen state=latest
-    #- name: Installation de mysql workbench
-    #  apt: name=mysql-workbench state=latest
-    - name: Serveur en Français
-      apt: name=language-pack-fr state=latest
-      apt: name=language-pack-fr-base state=latest
