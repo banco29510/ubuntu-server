@@ -1,9 +1,6 @@
-
 - name: Installation de x2go
   hosts: localhost
-  become: yes
-  become_user: vagrant
-  become_pass: vagrant
+  remote_user: vagrant
   tasks:
     - name: Installation de python-software-properties
       apt: name=python-software-properties state=latest
