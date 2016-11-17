@@ -1,5 +1,10 @@
+#
+# Pour ubuntu 14.04
+#
+
 - name: Installation de x2go
   hosts: localhost
+  remote_user: root
   tasks:
     - name: Installation de python-software-properties
       apt: name=python-software-properties state=latest
@@ -11,3 +16,149 @@
       apt: name=x2goserver state=latest
       apt: name=x2goserver-xsession state=latest
       apt: name=xfce4 state=latest
+
+
+- name: Installation de la configurations générales
+  hosts: localhost
+  remote_user: root
+  tasks:
+    - name: Installation de ntp
+      apt: name=ntp state=latest
+    - name: Installation de Gedit
+      apt: name=gedit state=latest
+    - name: Installation de unzip
+      apt: name=unzip state=latest
+    #- name: Installation de clamav
+    #  apt: name=clamav state=latest
+    - name: Installation de gdebi
+      apt: name=gdebi state=latest
+    - name: Installation de erlang
+      apt: name=erlang state=latest
+    - name: Installation de doxygen
+      apt: name=doxygen state=latest
+    - name: Serveur en Français
+      apt: name=language-pack-fr state=latest
+      apt: name=language-pack-fr-base state=latest
+
+
+- name: Installation du serveur web
+  hosts: localhost
+  remote_user: root
+  tasks: 
+    - name: Installation de Git
+      apt: name=git state=latest
+
+    - name: Installation make et cmake
+      apt: name=make state=latest
+      apt: name=cmake state=latest
+
+    - name: Installation de python
+      apt: name=python state=latest
+      apt: name=python-pip state=latest
+      apt: name=python-dev state=latest
+      apt: name=libpq-dev state=latest
+      apt: name=build-dep state=latest
+      apt: name=python-psycopg2 state=latest
+      apt: name=python-lxml state=latest
+      apt: name=python-cffi state=latest
+      apt: name=build-essential state=latest
+
+    - name: Installation de python3
+      apt: name=python3 state=latest
+      apt: name=python3-dev state=latest
+      apt: name=python3-pip state=latest
+      apt: name=python3-cffi state=latest
+
+    - name: Installation de postgresql
+      apt: name=postgresql state=latest
+      apt: name=postgresql-client state=latest
+      apt: name=postgresql-client-common state=latest
+      apt: name=postgresql-contrib state=latest
+      apt: name=phppgadmin state=latest
+      apt: name=pgadmin3 state=latest
+
+
+    - service: name=apache2 state=started enabled=yes
+    
+    - name: Installation de supervisor
+      apt: name=supervisor update_cache=yes state=latest
+
+    - name: Installation de Apache et php
+      apt: name=apache2 update_cache=yes state=latest
+      apt: name=apache2-utils update_cache=yes state=latest
+      apt: name=php state=latest
+      apt: name=libapache2-mod-php state=latest
+      apt: name=libapache2-mod-wsgi state=latest
+      apt: name=libapache2-mod-wsgi-py3 state=latest
+      apt: name=php-pgsql state=latest
+      apt: name=phpmyadmin state=latest
+
+
+    - name: Installation de Lilypond
+      apt: name=lilypond state=latest
+
+    - name: Installation de rabbitmqserver
+      apt: name=rabbitmq-server state=latest
+    - rabbitmq_plugin: names=rabbitmq_management state=enabled
+    - service: name=rabbitmq-server state=reloaded
+
+    - name: Installation de gitlab
+      apt: name=curl state=latest
+      apt: name=openssh-server state=latest
+      apt: name=ca-certificates state=latest
+      apt: name=postfix state=latest
+    - get_url: url=https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh dest=/home/gitlab.sh mode=0777
+    #- shell: gitlab.sh chdir=/home/
+    #- apt: name=gitlab-ce state=latest
+    #- command: gitlab-ctl reconfigure
+
+    #- name: Installation de mantis (bugtracker)
+    #  apt: name=curl state=latest
+    #- unarchive: src=https://github.com/mantisbt/mantisbt/archive/release-1.3.0-rc.2.zip dest=/var/www/html/ copy=no
+
+    - name: Installation de Django
+      pip: name=django 
+      pip: name=gunicorn 
+
+    - name: Installation de nodejs
+      apt: name=nodejs state=latest
+      apt: name=npm state=latest
+
+    - name: Installation de redis + redis commander
+      apt: name=redis-server state=latest
+
+    - get_url: url=https://raw.githubusercontent.com/ajenti/ajenti/master/scripts/install.sh dest=/home/ajenti.sh mode=0777
+    - shell: bash /home/ajenti.sh
+
+    - name: Installation de ajenti (panel admin)
+      pip: name=ajenti-panel state=present
+      pip: name=ajenti.plugin.dashboard state=present
+      pip: name=ajenti.plugin.settings state=present
+      pip: name=ajenti.plugin.pluins state=present
+      pip: name=ajenti.plugin.filemanager state=present
+      pip: name=ajenti.plugin.notepad state=present
+      pip: name=ajenti.plugin.packages state=present
+      pip: name=ajenti.plugin.services state=present
+      pip: name=ajenti.plugin.terminal state=present
+
+    #- name: Installation piwik
+    #  pip: name=django state=present
+    #- unarchive: src=https://builds.piwik.org/piwik.zip dest=/var/www/html/ copy=no mode=0777
+
+    #- name: Installation de sémaphore (CI ansible)
+    #  pip: name=django state=present
+    #- get_url: url=https://github.com/ansible-semaphore/semaphore/releases/download/v2.0.4/semaphore_linux_amd64 dest=/usr/bin/semaphore mode=0777
+      #- command: semaphore -setup chdir=/usr/bin/semaphore/
+      
+
+    - name: Création virtual host
+      file: path=/etc/score/ state=directory mode=0777
+      file: path=/etc/piwik/ state=directory mode=0777
+      file: path=/etc/asset/ state=directory mode=0777
+      file: path=/etc/gitlab/ state=directory mode=0777
+      file: path=/etc/pgsql/ state=directory mode=0777
+      
+
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted
