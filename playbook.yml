@@ -104,7 +104,7 @@
       apt: name=openssh-server state=latest
       apt: name=ca-certificates state=latest
       apt: name=postfix state=latest
-    - get_url: url=https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh dest=/home/gitlab.sh mode=0777
+    #- get_url: url=https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh dest=/home/gitlab.sh mode=0777
     #- shell: gitlab.sh chdir=/home/
     #- apt: name=gitlab-ce state=latest
     #- command: gitlab-ctl reconfigure
@@ -114,14 +114,14 @@
     #- unarchive: src=https://github.com/mantisbt/mantisbt/archive/release-1.3.0-rc.2.zip dest=/var/www/html/ copy=no
 
     - name: Installation de Django
-      pip: name=django 
-      pip: name=gunicorn 
+    - pip: name=django 
+    - pip: name=gunicorn 
 
     - name: Installation de nodejs
       apt: name=nodejs state=latest
       apt: name=npm state=latest
 
-    - name: Installation de redis + redis commander
+    - name: Installation de redis
       apt: name=redis-server state=latest
 
     - get_url: url=https://raw.githubusercontent.com/ajenti/ajenti/master/scripts/install.sh dest=/home/ajenti.sh mode=0777
@@ -139,14 +139,8 @@
       pip: name=ajenti.plugin.terminal state=present
 
     #- name: Installation piwik
-    #  pip: name=django state=present
-    #- unarchive: src=https://builds.piwik.org/piwik.zip dest=/var/www/html/ copy=no mode=0777
 
-    #- name: Installation de sémaphore (CI ansible)
-    #  pip: name=django state=present
-    #- get_url: url=https://github.com/ansible-semaphore/semaphore/releases/download/v2.0.4/semaphore_linux_amd64 dest=/usr/bin/semaphore mode=0777
-      #- command: semaphore -setup chdir=/usr/bin/semaphore/
-      
+    #- name: Installation de sémaphore (CI ansible)   
 
     - name: Création virtual host
       file: path=/etc/score/ state=directory mode=0777
