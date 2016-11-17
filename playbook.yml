@@ -114,8 +114,8 @@
     #- unarchive: src=https://github.com/mantisbt/mantisbt/archive/release-1.3.0-rc.2.zip dest=/var/www/html/ copy=no
 
     - name: Installation de Django
-    - pip: name=django 
-    - pip: name=gunicorn 
+      pip: name=django executable=pip-3
+      pip: name=gunicorn executable=pip-3
 
     - name: Installation de nodejs
       apt: name=nodejs state=latest
