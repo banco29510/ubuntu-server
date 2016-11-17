@@ -76,9 +76,6 @@
       apt: name=postgresql-contrib state=latest
       apt: name=phppgadmin state=latest
       apt: name=pgadmin3 state=latest
-
-
-    - service: name=apache2 state=started enabled=yes
     
     - name: Installation de supervisor
       apt: name=supervisor update_cache=yes state=latest
