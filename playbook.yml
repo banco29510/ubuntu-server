@@ -140,7 +140,9 @@
       pip: name=ajenti.plugin.services state=present
       pip: name=ajenti.plugin.terminal state=present
 
-    #- name: Installation piwik
+    - name: Installation piwik
+      file: path= /usr/share/nginx/piwik state=directory mode=0777
+      file: path=/usr/share/nginx/piwik/index.html mode=0777
 
     #- name: Installation de sémaphore (CI ansible)   
 
@@ -160,7 +162,7 @@
       apt_repository: repo='deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib' state=present
     - name: Linux Update/upgrade
       apt: upgrade=dist
-    - name: Installation de x2go
+    - name: Installation de webmin
       apt: name=perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python libwww-perl liblwp-protocol-https-perl state=latest
       apt: name=webmin state=latest
 
