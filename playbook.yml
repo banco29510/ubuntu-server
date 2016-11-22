@@ -16,6 +16,8 @@
       apt: name=x2goserver state=latest
       apt: name=x2goserver-xsession state=latest
       apt: name=xfce4 state=latest
+    - user: name="site" password="antoine" comment="site" uid=1040 group=admin # créer un utilisateur
+
 
 
 - name: Installation de la configurations générales
