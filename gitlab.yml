@@ -1,0 +1,23 @@
+#
+# Pour ubuntu 16.04 : install gitlab
+#
+
+- name: Installation de gitlab
+  hosts: localhost
+  remote_user: root
+    - { role:geerlingguy.phpmyadmin }
+#    - { role:hicknhack-software.piwik }
+#    - { role: mrlesmithjr.django }
+#    - { role: hswong3i.webmin }
+#    - { role:  axelitus.mysql }
+#    - { role:  shakahl.ansible-phpmyadmin }
+#    - { role: geerlingguy.gitlab }
+#    - { role: openearth-stack.pgadmin4 }
+#    - { role:  hoall.jenkins }
+
+  handlers:
+    - name: restart sshd
+      service: name=sshd state=restarted
+
+    - name: restart apache
+      service: name=httpd state=restarted

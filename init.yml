@@ -1,0 +1,138 @@
+#
+# Pour ubuntu 16.04 : int le serveur
+#
+
+- name: Installation des paquets généraux
+  hosts: localhost
+  remote_user: root
+  tasks:
+    - name: Installation de python-software-properties
+      apt: name=python-software-properties state=latest
+    
+    - name: Linux Update/upgrade
+      apt: upgrade=dist
+
+    - name: create user + ssh
+      user: 
+        name: "site" 
+        password: "antoine" 
+        comment: "site" 
+        uid: 1040 
+        group: admin 
+        generate_ssh_key: yes 
+        createhome: yes 
+        ssh_key_file: site_key 
+        ssh_key_passphrase: ''
+
+    - authorized_key:
+        user: site
+        key: "{{ lookup('file', '/home/site/site_key.pub') }}"
+    - copy:
+        src: /home/site/site_key
+        dest: /vagrant/
+        owner: ubuntu
+        group: admin
+        mode: 0777
+
+    - user:
+        name: site
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+        ssh_key_passphrase: ''
+        createhome: yes
+    
+    - ufw:
+        state: enabled
+        policy: allow
+
+    - name: Installation de python3
+      apt: name=python3 state=latest
+      apt: name=python3-dev state=latest
+      apt: name=python3-pip state=latest
+      apt: name=python3-cffi state=latest
+
+#    - name: Remove "python2" package
+#      apt: name=python2 state=absent
+
+    - name: Installation de perl         
+      apt: name=perl state=latest
+      apt: name=libnet-ssleay-perl state=latest
+      apt: name=openssl state=latest
+      apt: name=libauthen-pam-perl state=latest
+      apt: name=libpam-runtime state=latest
+      apt: name=libio-pty-perl state=latest
+      apt: name=apt-show-versions state=latest
+      apt: name=libwww-perl state=latest
+      apt: name=liblwp-protocol-https-perl state=latest
+  
+    - name: Installation de ruby
+      apt: name=ruby state=latest
+
+    - name: Installation de erlang
+      apt: name=erlang state=latest
+
+    - name: Installation de mysql
+      apt: name=mysql-server state=latest
+
+    - name: Installation de postgresql
+      apt: name=postgresql state=latest
+      apt: name=postgresql-client state=latest
+      apt: name=postgresql-client-common state=latest
+      apt: name=postgresql-contrib state=latest
+
+    - name: Installation de mysql
+      apt: name=mysql-server state=latest
+
+    - name: Installation de Apache et php
+      apt: name=apache2 update_cache=yes state=latest
+      apt: name=apache2-utils update_cache=yes state=latest
+      apt: name=php state=latest
+      apt: name=libapache2-mod-php state=latest
+      apt: name=libapache2-mod-wsgi state=latest
+      apt: name=libapache2-mod-wsgi-py3 state=latest
+
+    - name: Installation de nodejs
+      apt: name=nodejs state=latest
+      apt: name=npm state=latest
+
+    - name: Installation de redis
+      apt: name=redis-server state=latest
+
+    - name: Installation de paquets divers
+      apt: name=lilypond state=latest
+      apt: name=curl state=latest
+      apt: name=make state=latest
+      apt: name=cmake state=latest
+      apt: name=git state=latest
+      apt: name=doxygen state=latest
+      apt: name=unzip state=latest
+      apt: name=ntp state=latest
+
+    - name: Installation de paquets pip
+      pip: name=wheel executable=pip3
+      pip: name=flake8 executable=pip3
+      pip: name=gunicorn executable=pip3
+      pip: name=django executable=pip3
+      pip: name=unipath executable=pip3
+      pip: name=pillow executable=pip3
+      pip: name=psutil executable=pip3
+      pip: name=requests executable=pip3
+      pip: name=raven executable=pip3
+      pip: name=celery executable=pip3
+      pip: name=cffi executable=pip3
+      pip: name=redis executable=pip3
+      pip: name=pylint executable=pip3
+
+    - name: Installation de rabbitmqserver
+      apt: name=rabbitmq-server state=latest
+    - rabbitmq_plugin: names=rabbitmq_management state=enabled
+    - service: name=rabbitmq-server state=reloaded
+      
+
+  handlers:
+    - name: restart sshd
+      service: name=sshd state=restarted
+
+    - name: restart apache
+      service: name=httpd state=restarted
